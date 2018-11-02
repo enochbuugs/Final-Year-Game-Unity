@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour {
 
+    // Car Movement 
     float verticalMovement;
     float horizontalMovement;
     float steeringAngle;
     float maxSteerAngle = 30;
+    float maxSpeed;
+    public float setMaxSpeed;
+    public float actualSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
     public float motorTorquePower = 50;
     public float brakeTorquePower = 100;
     public float brakingPower = 50f;
 
-    float maxSpeed;
-    public float setMaxSpeed;
-    public float actualSpeed {get{ return rb.velocity.magnitude * 2.23693629f; }}
-
-    // Braking
+    // Braking Bools
     private bool isHandBraking;
     private bool isBraking;
 
@@ -27,30 +27,23 @@ public class CarController : MonoBehaviour {
     float newTorquePower = 1000;
     float oldTorquePower = 500;
 
+    //Updating Nitrous Values 
+    public float currentNitro; // will be the max nitro
+    float maxNitro = 100;// how much nitrous do we have.
 
-    //nitrous system for updating the current value.
-    float currentNitro;
-    public float maxNitro = 100;// how much nitrous do we have.
-    float t;
-    float decreaseNitroRate;
-    float nitroTimer = 1;
-
-
-
+    // Car Mathematics (Vectors, Quarternion, Rigidbody, Transforms and WheelCollider)
     private Vector3 wheelPos;
     private Quaternion wheelRot;
     private Rigidbody rb;
-
     public Transform transformWheelFrontLeft, transformWheelFrontRight;
     public Transform transformWheelRearLeft, transformWheelRearRight;
-
     public WheelCollider wheelFrontLeft, wheelFrontRight;
     public WheelCollider wheelRearLeft, wheelRearRight;
 
     void Start()
     {
-        rb = FindObjectOfType<Rigidbody>();
-        currentNitro = maxNitro;
+        rb = FindObjectOfType<Rigidbody>(); // get the rigidbody thats attached to the car..
+        currentNitro = maxNitro; // current nitro is now equal to the max nitro (100 at the start)
     }
 
     // Update is called once per frame
@@ -58,14 +51,13 @@ public class CarController : MonoBehaviour {
     {
         SetInput();
         SteerCar();
-        NewNitroSystem();
         AccelerateCar();
+        NewNitroSystem();
         HandBrakeCar();
         CarBraking();
-        DecreaseNitroValue();
+        UpdateNitroValue();
         UpdateWheelMotions();
-
-        Debug.Log(currentNitro);
+        //Debug.Log(currentNitro);
     }
 
     void SetInput()
@@ -85,60 +77,6 @@ public class CarController : MonoBehaviour {
         wheelFrontRight.steerAngle = steeringAngle;
     }
 
-
-
-    void NewNitroSystem()
-    {
-        // pass the max speed assigned and set it in another variable.
-        maxSpeed = setMaxSpeed;
-
-        // if the 'E' key is pressed
-        // and the nitrous has not been activated
-        // and the car has not reached the max nitro speed.
-        // turn the nitrous on and increase the torque power of the car.
-        if (Input.GetKey(KeyCode.E) && !isNitrousOn)
-        {
-            isNitrousOn = true;
-            motorTorquePower = newTorquePower;
-            setMaxSpeed = maxNitroSpeed;
-            Debug.Log("Nitro activated");
-        }
-        else if(Input.GetKeyUp(KeyCode.E) && isNitrousOn)
-        { 
-            isNitrousOn = false;
-            motorTorquePower = oldTorquePower;
-            Debug.Log("nitrous deactivated");
-        }
-
-        // if the nitro value is equal to zero
-        // dont boost anymore..
-        if (Input.GetKey(KeyCode.E) && isNitrousOn && currentNitro <= 0)
-        {
-            isNitrousOn = false;
-            motorTorquePower = oldTorquePower;
-        }
-    }
-
-    void NitroDecreaseRate(int rate)
-    {
-        t = 0f;
-        currentNitro -= rate * Time.deltaTime;
-    }
-
-    void DecreaseNitroValue()
-    {
-        if (Input.GetKey(KeyCode.E))
-        {
-            NitroDecreaseRate(1);
-            Debug.Log("Decreased Nitro Value");
-        }
-
-        if (currentNitro <= 0)
-        {
-            currentNitro = 0;
-        }
-    }
-
     void AccelerateCar()
     {
         maxSpeed = setMaxSpeed;
@@ -156,6 +94,88 @@ public class CarController : MonoBehaviour {
         wheelRearRight.motorTorque = motorTorquePower * verticalMovement;
     }
 
+    void NewNitroSystem()
+    {
+        // pass the max speed assigned and set it in another variable.
+        maxSpeed = setMaxSpeed;
+
+        // if the 'E' key is PRESSED
+        // and the nitrous has not been activated
+        // turn the nitrous on and increase the torque power of the car.
+        // with nitrous on the car has the ability to reach the max nitro speed
+        // else if 'E' key is RELEASED then revert back to the normal torque power of the car (no nitrous)
+        if (Input.GetKey(KeyCode.E) && !isNitrousOn)
+        {
+            isNitrousOn = true;
+            motorTorquePower = newTorquePower;
+            setMaxSpeed = maxNitroSpeed;
+            Debug.Log("Nitro activated");
+        }
+        else if(Input.GetKeyUp(KeyCode.E) && isNitrousOn)
+        { 
+            isNitrousOn = false;
+            motorTorquePower = oldTorquePower;
+            Debug.Log("nitrous deactivated");
+        }
+
+        // if the nitro value is equal to zero OR is equal to 5
+        // dont boost...
+        if (Input.GetKey(KeyCode.E) && isNitrousOn && (currentNitro <= 0) || (currentNitro <= 5))
+        {
+            isNitrousOn = false;
+            motorTorquePower = oldTorquePower;
+        }
+    }
+
+    void UpdateNitroRate(int downRate, int upRate)
+    {
+        // this function allows the ability to
+        // either..
+        // decrease the nitro value when pressed
+        // increase the nitro value when released
+
+        currentNitro -= downRate * Time.deltaTime;
+        currentNitro += upRate * Time.deltaTime;
+    }
+
+    void DecreasedNitroValue()
+    {
+        UpdateNitroRate(0, 1);
+        Debug.Log("Refilling Nitro Value");
+    }
+
+    void UpdateNitroValue()
+    {
+        // This function updates the nitro value based on whether the E key is pressed or not
+        // If the key is pressed, decrease the nitro value
+        // If the key is released, wait 5 SECONDS then refill the nitro value back to 100
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            UpdateNitroRate(20, 0);
+            CancelInvoke();
+            Debug.Log("Decreased Nitro Value");
+        }
+        else
+        {
+            Debug.Log("Wait 5 seconds to refill nitrous");
+            Invoke("DecreasedNitroValue", 5);
+        }
+
+
+        // Safety Checks
+        // Making sure the values are set to 0 and 100
+        // If these numbers are ever reached.
+        if (currentNitro <= 0)
+        {
+            currentNitro = 0;
+        }
+
+        if (currentNitro > 100)
+        {
+            currentNitro = 100;
+        }
+    }
 
     void HandBrakeCar()
     {
