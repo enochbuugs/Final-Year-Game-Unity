@@ -21,9 +21,14 @@ public class PlayerHealthBar : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        healthBar.fillAmount = currentHealth / maxHealth;
+        DisplayHealthBar();
         PressKeyToDamage();
         RefillHealth();
+    }
+
+    void DisplayHealthBar()
+    {
+        healthBar.fillAmount = currentHealth / maxHealth;
     }
 
     void RefillHealth()
@@ -132,19 +137,4 @@ public class PlayerHealthBar : MonoBehaviour {
             Debug.Log("Damaging");
         }
     }
-
-
-    //void AddDamage(float damageAmount)
-    //{
-    //    _damage += damageAmount;
-
-    //    damageBar.fillAmount = _damage / noDamage;
-
-    //    if (_damage >= 100)
-    //    {
-    //        Die();
-    //    }
-    //}
-
-
 }

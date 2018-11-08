@@ -12,8 +12,6 @@ public class DistanceToFinishLine : MonoBehaviour
     float lengthOfTrack;
     float completed; // how much have you completed of the track
 
-    public float percentageValue;
-
 
 
     // Use this for initialization
@@ -28,20 +26,19 @@ public class DistanceToFinishLine : MonoBehaviour
         // loop through the waypoints in the track and get the distance of the whole track
         foreach (GameObject WP in waypoints)
         {
-            //Debug.Log(WP);
+            Debug.Log(WP);
             if (previousWaypoint != null)
             {
-                lengthOfTrack += Vector3.Distance(WP.transform.position, previousWaypoint.transform.position);
+                //lengthOfTrack += Vector3.Distance(WP.transform.position, previousWaypoint.transform.position);
+                lengthOfTrack += Vector3.Distance(previousWaypoint.transform.position, WP.transform.position);
             }
 
             previousWaypoint = WP;
         }
 
-
-
         //initialize the currentwaypoint to the array index of the first item in the array
-        currentWayPoint = waypoints[0];
-        //currentWayPoint = waypoints[4];
+        // currentWayPoint = waypoints[0];
+        currentWayPoint = waypoints[3];
 
 
         //Debug.Log(lengthOfTrack);
@@ -50,11 +47,17 @@ public class DistanceToFinishLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        DistanceToWaypointNodes();
+    }
+
+    void DistanceToWaypointNodes()
+    {
         //gets the distance between the first waypoint and the player
         distanceToWaypoint = Vector3.Distance(playerCar.transform.position, currentWayPoint.transform.position);
         completed = distanceToWaypoint / lengthOfTrack;
-        //Debug.Log(100 * completed);
+        Debug.Log(100 * completed);
     }
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -67,7 +70,7 @@ public class DistanceToFinishLine : MonoBehaviour
         {
             Debug.Log("Triggered waypoint one");
             other.gameObject.GetComponent<Collider>().enabled = false;
-            currentWayPoint = waypoints[1];
+            //currentWayPoint = waypoints[1];
         }
 
 
@@ -75,7 +78,7 @@ public class DistanceToFinishLine : MonoBehaviour
         {
             Debug.Log("Triggered waypoint two");
             other.gameObject.GetComponent<Collider>().enabled = false;
-            currentWayPoint = waypoints[2];
+            //currentWayPoint = waypoints[2];
         }
 
 
@@ -83,7 +86,7 @@ public class DistanceToFinishLine : MonoBehaviour
         {
             Debug.Log("Triggered waypoint three");
             other.gameObject.GetComponent<Collider>().enabled = false;
-            currentWayPoint = waypoints[3];
+            //currentWayPoint = waypoints[3];
         }
 
         if ((other.gameObject.name == "Waypoint4") && (completed <= 30))
@@ -91,11 +94,11 @@ public class DistanceToFinishLine : MonoBehaviour
             Debug.Log("Triggered waypoint four");
             other.gameObject.GetComponent<Collider>().enabled = false;
             
-            if (waypoints.Length >= 4)
-            {
-                Debug.Log("Finished");
-                return;
-            }
+            //if (waypoints.Length >= 4)
+            //{
+            //    Debug.Log("Finished");
+            //    return;
+            //}
         }
 
     }

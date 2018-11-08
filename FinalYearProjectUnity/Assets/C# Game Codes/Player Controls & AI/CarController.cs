@@ -23,9 +23,11 @@ public class CarController : MonoBehaviour {
 
     //Nitrous system pressing E and out
     bool isNitrousOn = false;
+    bool isKeyPressed = false;
     public float maxNitroSpeed; // maximum speed the car go in nitrous mode
     float newTorquePower = 1000;
     float oldTorquePower = 500;
+
 
     //Updating Nitrous Values 
     public float currentNitro; // will be the max nitro
@@ -109,18 +111,18 @@ public class CarController : MonoBehaviour {
             isNitrousOn = true;
             motorTorquePower = newTorquePower;
             setMaxSpeed = maxNitroSpeed;
-            Debug.Log("Nitro activated");
+            //Debug.Log("Nitro activated");
         }
         else if(Input.GetKeyUp(KeyCode.E) && isNitrousOn)
         { 
             isNitrousOn = false;
             motorTorquePower = oldTorquePower;
-            Debug.Log("nitrous deactivated");
+           //Debug.Log("nitrous deactivated");
         }
 
         // if the nitro value is equal to zero OR is equal to 5
         // dont boost...
-        if (Input.GetKey(KeyCode.E) && isNitrousOn && (currentNitro <= 0) || (currentNitro <= 5))
+        if (Input.GetKey(KeyCode.E) && isNitrousOn && (currentNitro <= 5))
         {
             isNitrousOn = false;
             motorTorquePower = oldTorquePower;
@@ -141,7 +143,7 @@ public class CarController : MonoBehaviour {
     void DecreasedNitroValue()
     {
         UpdateNitroRate(0, 1);
-        Debug.Log("Refilling Nitro Value");
+        //Debug.Log("Refilling Nitro Value");
     }
 
     void UpdateNitroValue()
@@ -154,11 +156,11 @@ public class CarController : MonoBehaviour {
         {
             UpdateNitroRate(20, 0);
             CancelInvoke();
-            Debug.Log("Decreased Nitro Value");
+            //Debug.Log("Decreased Nitro Value");
         }
         else
         {
-            Debug.Log("Wait 5 seconds to refill nitrous");
+            //Debug.Log("Wait 5 seconds to refill nitrous");
             Invoke("DecreasedNitroValue", 5);
         }
 
