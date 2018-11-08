@@ -12,73 +12,29 @@ public class PlayerHealthBar : MonoBehaviour {
     private float currentHealth;
 
 
-    float timer = 0f;
-    public float regenRate = 1;
-    float healthTimer = 1;
-    bool isRegeneratingHealth;
-    IEnumerator currentCoroutine;
-
-
     // Use this for initialization
-    void Start () {
-
+    void Start ()
+    {
         currentHealth = maxHealth;
-        
     }
 
     // Update is called once per frame
     void Update()
     {
         healthBar.fillAmount = currentHealth / maxHealth;
-
-        if ((currentHealth != maxHealth) && (!isRegeneratingHealth))
-        {
-            currentCoroutine = (WaitToRegenHealth());
-            StartCoroutine(currentCoroutine);
-        }
-
-        if ((currentHealth == maxHealth) && (isRegeneratingHealth))
-        {
-            StopAllCoroutines();
-        }
-
         PressKeyToDamage();
+        RefillHealth();
     }
-
-    private IEnumerator WaitToRegenHealth()
-    {
-
-        isRegeneratingHealth = true;
-
-        yield return new WaitForSeconds(20);
-
-        while (currentHealth < maxHealth)
-        {
-            RefillHealth();
-
-            yield return 0;
-        }
-
-        yield return new WaitForSeconds(20);
-
-        isRegeneratingHealth = false;
-
-        //StopCoroutine(currentCoroutine);
-        //currentCoroutine = WaitToRegenHealth();
-        //StartCoroutine(currentCoroutine);
-    }
-
 
     void RefillHealth()
     {
-        timer += Time.deltaTime;
-
-        if (currentHealth < maxHealth)
+        if (currentHealth >= maxHealth)
         {
-            if (timer >= healthTimer)
-            {
-                RegenerateHealth(regenRate);
-            }
+            CancelInvoke();
+        }
+        else
+        {
+            Invoke("WaitToRefillHealthBar", 5);
         }
     }
 
@@ -92,13 +48,17 @@ public class PlayerHealthBar : MonoBehaviour {
 
     void RegenerateHealth(float rate)
     {
-        timer = 0f;
         currentHealth += rate;
+    }
+
+    void WaitToRefillHealthBar()
+    {
+        RegenerateHealth(0.1f);
+        Debug.Log("Wait 5 seconds to refill health");
     }
 
     void TakeDamage(int amount)
     {
-        isRegeneratingHealth = false;
         currentHealth -=  amount;
 
         if (currentHealth <= 0)
@@ -112,14 +72,6 @@ public class PlayerHealthBar : MonoBehaviour {
         Debug.Log("Die");
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.name == "Damage")
-    //    {
-    //        TakeDamage(10);
-    //        Debug.Log("Damaged");
-    //    }
-    //}
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -132,10 +84,16 @@ public class PlayerHealthBar : MonoBehaviour {
 
     void Damage1(Collision collision)
     {
+        // fixed collisions!!
         if (collision.gameObject.name == "Damage1")
         {
             TakeDamage(2);
+            CancelInvoke();
             Debug.Log("Damaging");
+        }
+        else
+        {
+            RefillHealth();
         }
     }
 
