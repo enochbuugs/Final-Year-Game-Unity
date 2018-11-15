@@ -24,7 +24,6 @@ public class AICarController : MonoBehaviour {
     Quaternion wheelRot;
 
 
-
     public void MoveAICar()
     {
         wheelFrontLeft.motorTorque = motorTorquePowerAI;
@@ -52,7 +51,7 @@ public class AICarController : MonoBehaviour {
     }
 
 
-    public void UpdateWheelMotion(WheelCollider wheelC, Transform wheelT)
+    void UpdateWheelMotion(WheelCollider wheelC, Transform wheelT)
     {
         wheelPos = transform.position;
         wheelRot = transform.rotation;
