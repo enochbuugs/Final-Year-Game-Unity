@@ -55,7 +55,7 @@ public class DistanceToFinishLine : MonoBehaviour
         //gets the distance between the first waypoint and the player
         distanceToWaypoint = Vector3.Distance(playerCar.transform.position, currentWayPoint.transform.position);
         completed = distanceToWaypoint / lengthOfTrack;
-        Debug.Log(100 * completed);
+        //Debug.Log(100 * completed);
     }
 
 

@@ -3,14 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealthBar : MonoBehaviour {
+public class PlayerHealthBar : MonoBehaviour, IDamageable {
 
+    public float maxHealth = 100; // starting with 100 health
+    public float currentHealth;
     public Image healthBar;
 
-    // starting with 100 health
-    public float maxHealth = 100;
-    private float currentHealth;
+    public float GetDamage
+    {
+        get
+        {
+            return currentHealth;
+        }
 
+        set
+        {
+            currentHealth = value;
+        }
+    }
+
+    public void LightDamage(float lightDamAmount)
+    {
+        throw new System.NotImplementedException();
+    }
 
     // Use this for initialization
     void Start ()
@@ -18,13 +33,14 @@ public class PlayerHealthBar : MonoBehaviour {
         currentHealth = maxHealth;
     }
 
+
     // Update is called once per frame
     void Update()
     {
         DisplayHealthBar();
-        PressKeyToDamage();
         RefillHealth();
     }
+
 
     void DisplayHealthBar()
     {
@@ -41,15 +57,13 @@ public class PlayerHealthBar : MonoBehaviour {
         {
             Invoke("WaitToRefillHealthBar", 5);
         }
-    }
 
-    void PressKeyToDamage()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (currentHealth <= 0)
         {
-            TakeDamage(5);
+            currentHealth = 0;
         }
     }
+
 
     void RegenerateHealth(float rate)
     {
@@ -62,39 +76,16 @@ public class PlayerHealthBar : MonoBehaviour {
         Debug.Log("Wait 5 seconds to refill health");
     }
 
-    void TakeDamage(int amount)
-    {
-        currentHealth -=  amount;
 
-        if (currentHealth <= 0)
+    void DamageCollisionEasy(Collision collision)
+    {
+        GameObject hitObject = collision.gameObject;
+        IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
+
+        if (hitObject.GetComponent<IDamageable>() != null)
         {
-            Die();
-        }
-    }
-
-    void Die()
-    {
-        Debug.Log("Die");
-    }
-
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Damage1(collision);
-        Damage2(collision);
-        Damage3(collision);
-        Damage4(collision);
-        Damage5(collision);
-    }
-
-    void Damage1(Collision collision)
-    {
-        // fixed collisions!!
-        if (collision.gameObject.name == "Damage1")
-        {
-            TakeDamage(2);
+            easyDamageObj.LightDamage(10);
             CancelInvoke();
-            Debug.Log("Damaging");
         }
         else
         {
@@ -102,39 +93,8 @@ public class PlayerHealthBar : MonoBehaviour {
         }
     }
 
-    void Damage2(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Damage2")
-        {
-            TakeDamage(5);
-            Debug.Log("Damaging");
-        }
-    }
-
-    void Damage3(Collision collision)
-    {
-        if (collision.gameObject.name == "Damage3")
-        {
-            TakeDamage(3);
-            Debug.Log("Damaging");
-        }
-    }
-
-    void Damage4(Collision collision)
-    {
-        if (collision.gameObject.name == "Damage4")
-        {
-            TakeDamage(7);
-            Debug.Log("Damaging");
-        }
-    }
-
-    void Damage5(Collision collision)
-    {
-        if (collision.gameObject.name == "Damage5")
-        {
-            TakeDamage(4);
-            Debug.Log("Damaging");
-        }
+        DamageCollisionEasy(collision);
     }
 }
