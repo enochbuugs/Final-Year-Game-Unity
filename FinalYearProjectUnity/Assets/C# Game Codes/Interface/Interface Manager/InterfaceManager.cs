@@ -6,7 +6,7 @@ using UnityEngine;
 public interface IDamageable
 { 
     // 3 levels of damage dealt
-    void LightDamage(float lightDamAmount);
+    void DamageTaken(float amout);
 
 
     // getter and setter for the damage dealt..

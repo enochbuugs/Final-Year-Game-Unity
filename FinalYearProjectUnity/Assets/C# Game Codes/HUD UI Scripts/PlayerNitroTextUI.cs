@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerNitroTextUI : MonoBehaviour {
 
-    CarController carController;
+    PlayerCarController carController;
     public GameObject playerCar;
     public Text nitroText;
 
@@ -13,7 +13,7 @@ public class PlayerNitroTextUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        carController = playerCar.GetComponent<CarController>();
+        carController = playerCar.GetComponent<PlayerCarController>();
     }
 	
 	// Update is called once per frame

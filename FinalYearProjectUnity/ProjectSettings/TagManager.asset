@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - WP1
+  - LightDamager
+  - MeduimDamager
+  - HardDamager
   layers:
   - Default
   - TransparentFX

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class CarController : MonoBehaviour {
+public class PlayerCarController : MonoBehaviour {
 
     // Car Movement 
-    float verticalMovement;
-    float horizontalMovement;
-    float steeringAngle;
-    float maxSteerAngle = 30;
-    float maxSpeed;
+    private float verticalMovement;
+    private float horizontalMovement;
+    private float steeringAngle;
+    private float maxSteerAngle = 30;
+    private float maxSpeed;
     public float setMaxSpeed;
     public float actualSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
     public float motorTorquePower = 50;
@@ -23,7 +23,6 @@ public class CarController : MonoBehaviour {
 
     //Nitrous system pressing E and out
     bool isNitrousOn = false;
-    bool isKeyPressed = false;
     public float maxNitroSpeed; // maximum speed the car go in nitrous mode
     float newTorquePower = 1000;
     float oldTorquePower = 500;
@@ -36,7 +35,7 @@ public class CarController : MonoBehaviour {
     // Car Mathematics (Vectors, Quarternion, Rigidbody, Transforms and WheelCollider)
     private Vector3 wheelPos;
     private Quaternion wheelRot;
-    private Rigidbody rb;
+    public Rigidbody rb;
     public Transform transformWheelFrontLeft, transformWheelFrontRight;
     public Transform transformWheelRearLeft, transformWheelRearRight;
     public WheelCollider wheelFrontLeft, wheelFrontRight;
@@ -44,7 +43,7 @@ public class CarController : MonoBehaviour {
 
     void Start()
     {
-        rb = FindObjectOfType<Rigidbody>(); // get the rigidbody thats attached to the car..
+        rb = GetComponent<Rigidbody>(); // get the component of this rigidbody (playercar)
         currentNitro = maxNitro; // current nitro is now equal to the max nitro (100 at the start)
     }
 

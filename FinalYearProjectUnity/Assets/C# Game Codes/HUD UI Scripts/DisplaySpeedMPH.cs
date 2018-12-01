@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class DisplaySpeedMPH : MonoBehaviour {
 
-    CarController carControl;
+    PlayerCarController carControl;
     public Text speedText;
     public GameObject playerCar;
 
     // Use this for initialization
     void Start ()
     {
-        carControl = playerCar.GetComponent<CarController>();
+        carControl = playerCar.GetComponent<PlayerCarController>();
     }
 	
 	// Update is called once per frame

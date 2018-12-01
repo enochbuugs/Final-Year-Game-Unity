@@ -22,15 +22,15 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         }
     }
 
-    public void LightDamage(float lightDamAmount)
+    public void DamageTaken(float amount)
     {
         throw new System.NotImplementedException();
     }
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-        currentHealth = maxHealth;
+        SetHealthBar();
     }
 
 
@@ -41,6 +41,10 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         RefillHealth();
     }
 
+    void SetHealthBar()
+    {
+        currentHealth = maxHealth;
+    }
 
     void DisplayHealthBar()
     {
@@ -77,14 +81,15 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     }
 
 
+    #region ("Damage Level Collision Methods")
     void DamageCollisionEasy(Collision collision)
     {
         GameObject hitObject = collision.gameObject;
         IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
 
-        if (hitObject.GetComponent<IDamageable>() != null)
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
         {
-            easyDamageObj.LightDamage(10);
+            easyDamageObj.DamageTaken(10);
             CancelInvoke();
         }
         else
@@ -93,8 +98,43 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         }
     }
 
+    void DamageCollisionMeduim(Collision collision)
+    {
+        GameObject hitObject = collision.gameObject;
+        IDamageable meduimDamageObj = hitObject.GetComponent<IDamageable>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "MeduimDamager"))
+        {
+            meduimDamageObj.DamageTaken(20);
+            CancelInvoke();
+        }
+        else
+        {
+            RefillHealth();
+        }
+    }
+
+    void DamageCollisionHard(Collision collision)
+    {
+        GameObject hitObject = collision.gameObject;
+        IDamageable hardDamageObj = hitObject.GetComponent<IDamageable>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "HardDamager"))
+        {
+            hardDamageObj.DamageTaken(30);
+            CancelInvoke();
+        }
+        else
+        {
+            RefillHealth();
+        }
+    }
+    #endregion 
+
     private void OnCollisionEnter(Collision collision)
     {
         DamageCollisionEasy(collision);
+        DamageCollisionMeduim(collision);
+        DamageCollisionHard(collision);
     }
 }

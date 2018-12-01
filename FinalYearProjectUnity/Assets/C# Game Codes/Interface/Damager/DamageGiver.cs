@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LightDamager : MonoBehaviour, IDamageable {
+public class DamageGiver : MonoBehaviour, IDamageable {
 
     PlayerHealthBar pb;
     public GameObject player;
@@ -21,10 +21,10 @@ public class LightDamager : MonoBehaviour, IDamageable {
         }
     }
 
-    public void LightDamage(float lightDamAmount)
+    public void DamageTaken(float amount)
     {
-        pb.currentHealth -= lightDamAmount;
-        Debug.Log("I have taken: " + lightDamAmount);
+        pb.currentHealth -= amount;
+        Debug.Log("I have taken: " + amount);
     }
 
     void Start()
