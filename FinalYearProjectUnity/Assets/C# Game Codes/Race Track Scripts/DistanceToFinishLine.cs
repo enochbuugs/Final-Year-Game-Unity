@@ -5,14 +5,15 @@ using UnityEngine;
 public class DistanceToFinishLine : MonoBehaviour
 {
 
-    public GameObject playerCar;
+    public GameObject playerCarBumper;
     public GameObject[] waypoints;
     public GameObject currentWayPoint;
     public float distanceToWaypoint;
     float lengthOfTrack;
-    float completed; // how much have you completed of the track
-
-
+    float completed = 0; // how much have you completed of the track
+    bool completedFinish = false;
+    int currentWaypointIndex = 0;
+    float raycastLength = 20f;
 
     // Use this for initialization
     void Start()
@@ -38,7 +39,7 @@ public class DistanceToFinishLine : MonoBehaviour
 
         //initialize the currentwaypoint to the array index of the first item in the array
         // currentWayPoint = waypoints[0];
-        currentWayPoint = waypoints[3];
+        currentWayPoint = waypoints[waypoints.Length-1];
 
 
         //Debug.Log(lengthOfTrack);
@@ -46,69 +47,66 @@ public class DistanceToFinishLine : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {        
+        if (!completedFinish)
+        {
+            DistanceToWaypointNodes();
+            RaycastToFinish();
+        }
+
+
+        Debug.Log(completed);
+    }
+
+    void RaycastToFinish()
     {
-        DistanceToWaypointNodes();
+        RaycastHit rayhit;
+        Ray newRay = new Ray(playerCarBumper.transform.position, transform.forward);
+       
+        if (Physics.Raycast(newRay , out rayhit, raycastLength))
+        {
+            if (rayhit.collider.gameObject.name == "FinishLine")
+            {
+                distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
+                completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
+                completed = Mathf.Clamp(completed, 0, 100);
+            }
+            Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
+        }
+        else
+            Debug.DrawRay(newRay.origin, newRay.direction  * raycastLength, Color.red);
     }
 
     void DistanceToWaypointNodes()
     {
         //gets the distance between the first waypoint and the player
-        distanceToWaypoint = Vector3.Distance(playerCar.transform.position, currentWayPoint.transform.position);
-        completed = distanceToWaypoint / lengthOfTrack;
-        //Debug.Log(100 * completed);
+        distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, currentWayPoint.transform.position);
+        completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
+        completed = Mathf.Clamp(completed, 0, 100);
     }
 
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name);
         TriggerWaypoints(other);
     }
 
     void TriggerWaypoints(Collider other)
     {
-        if ((other.gameObject.name == "Waypoint1") && (completed <= 30))
+        if ((other.gameObject.tag == "Waypoint") /*&& (completed <= 30)*/)
         {
-            Debug.Log("Triggered waypoint one");
+            Debug.Log("Triggered " +other.gameObject.name);
             other.gameObject.GetComponent<Collider>().enabled = false;
-            //currentWayPoint = waypoints[1];
+            currentWaypointIndex++;
+            //currentWayPoint = waypoints[currentWaypointIndex];
         }
 
-
-        if ((other.gameObject.name == "Waypoint2") && (completed <= 30))
+        if (other.gameObject.name == "FinishLine")
         {
-            Debug.Log("Triggered waypoint two");
-            other.gameObject.GetComponent<Collider>().enabled = false;
-            //currentWayPoint = waypoints[2];
+            completedFinish = true;
+            completed = 100f;
+            Debug.Log("You win!");
         }
-
-
-        if ((other.gameObject.name == "Waypoint3") && (completed <= 30))
-        {
-            Debug.Log("Triggered waypoint three");
-            other.gameObject.GetComponent<Collider>().enabled = false;
-            //currentWayPoint = waypoints[3];
-        }
-
-        if ((other.gameObject.name == "Waypoint4") && (completed <= 30))
-        {
-            Debug.Log("Triggered waypoint four");
-            other.gameObject.GetComponent<Collider>().enabled = false;
-            
-            //if (waypoints.Length >= 4)
-            //{
-            //    Debug.Log("Finished");
-            //    return;
-            //}
-        }
-
     }
-
-
-
-
-
-    //if(other.bounds.Contains(playerCar.transform.position))
-    //{
-    //    currentWayPoint = waypoints[1];
-    //}
 }
