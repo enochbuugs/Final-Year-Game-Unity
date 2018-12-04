@@ -22,7 +22,6 @@ public class AICarControllerOld : MonoBehaviour {
     [Range(0, 1)] [SerializeField] private float m_SteerHelper;
     [SerializeField] private float m_SteerSensitivity = 0.05f;
 
-
     public WheelCollider wheelFrontLeft, wheelFrontRight;
     public WheelCollider wheelRearLeft, wheelRearRight;
 
@@ -32,8 +31,6 @@ public class AICarControllerOld : MonoBehaviour {
     Vector3 wheelPos;
     Quaternion wheelRot;
     private Rigidbody m_Rigidbody;
-
-    public Transform m_Target;
 
     private void Start()
     {
@@ -63,19 +60,6 @@ public class AICarControllerOld : MonoBehaviour {
         //      Steering stuff       //
 
         steering = Mathf.Clamp(steering, -1, 1);
-
-
-        Vector3 offsetTargetPos = m_Target.position;
-
-        // calculate the local-relative position of the target, to steer towards
-        Vector3 localTarget = transform.InverseTransformPoint(offsetTargetPos);
-
-        // work out the local angle towards the target
-        float targetAngle = Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg;
-
-        // get the amount of steering needed to aim the car towards the target
-        float steer = Mathf.Clamp(targetAngle * m_SteerSensitivity, -1, 1) * Mathf.Sign(CurrentSpeed);
-
         steeringAngle = steering * maxSteerAngle;
         wheelFrontLeft.steerAngle = steeringAngle;
         wheelFrontRight.steerAngle = steeringAngle;

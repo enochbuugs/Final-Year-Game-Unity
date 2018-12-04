@@ -65,6 +65,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (currentHealth <= 0)
         {
             currentHealth = 0;
+
         }
     }
 

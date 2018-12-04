@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DamageGiver : MonoBehaviour, IDamageable {
 
     PlayerHealthBar pb;
-    public GameObject player;
+    public GameObject playerCar;
 
     public float GetDamage
     {
@@ -27,15 +27,25 @@ public class DamageGiver : MonoBehaviour, IDamageable {
         Debug.Log("I have taken: " + amount);
     }
 
+    void RetrievePlayerCarHealth()
+    {
+        pb = playerCar.GetComponent<PlayerHealthBar>();
+        pb.currentHealth = pb.maxHealth;
+    }
+    
+    void UpdatePlayerCarHealth()
+    {
+        pb = playerCar.GetComponent<PlayerHealthBar>();
+        pb.healthBar.fillAmount = pb.currentHealth / pb.maxHealth;
+    }
+
     void Start()
     {
-        pb = player.GetComponent<PlayerHealthBar>();
-        pb.currentHealth = pb.maxHealth;
+        RetrievePlayerCarHealth();
     }
 
     void Update()
     {
-        pb = player.GetComponent<PlayerHealthBar>();
-        pb.healthBar.fillAmount = pb.currentHealth / pb.maxHealth;
+        UpdatePlayerCarHealth();
     }
 }
