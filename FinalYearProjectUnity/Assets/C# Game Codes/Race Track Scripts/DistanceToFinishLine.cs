@@ -1,24 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DistanceToFinishLine : MonoBehaviour
 {
-
+    public Text progressionText;
     public GameObject playerCarBumper;
     public GameObject[] waypoints;
     public GameObject currentWayPoint;
+
     public float distanceToWaypoint;
-    float lengthOfTrack;
-    float completed = 0; // how much have you completed of the track
-    bool completedFinish = false;
-    int currentWaypointIndex = 0;
-    float raycastLength = 20f;
+    private float lengthOfTrack;
+    private float completed = 0; // how much have you completed of the track
+    private float raycastLength = 20f;
+    private int currentWaypointIndex = 0;
+    private bool completedFinish = false;
 
     // Use this for initialization
     void Start()
     {
+        GetLengthOfTrack();
+    }
 
+    // Update is called once per frame
+    void Update()
+    {        
+        if (!completedFinish)
+        {
+            DistanceToWaypointNodes();
+            RaycastToFinish();
+        }
+        DisplayProgressionUI();
+    }
+
+    void GetLengthOfTrack()
+    {
         //previous checkpoint set to null
         // length of track set to 0 for check testing.
         GameObject previousWaypoint = null;
@@ -30,32 +47,16 @@ public class DistanceToFinishLine : MonoBehaviour
             Debug.Log(WP);
             if (previousWaypoint != null)
             {
-                //lengthOfTrack += Vector3.Distance(WP.transform.position, previousWaypoint.transform.position);
                 lengthOfTrack += Vector3.Distance(previousWaypoint.transform.position, WP.transform.position);
             }
 
             previousWaypoint = WP;
         }
 
-        //initialize the currentwaypoint to the array index of the first item in the array
-        // currentWayPoint = waypoints[0];
-        currentWayPoint = waypoints[waypoints.Length-1];
-
+        //initialize the currentwaypoint to the array index of the last item in the array
+        currentWayPoint = waypoints[waypoints.Length - 1];
 
         //Debug.Log(lengthOfTrack);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {        
-        if (!completedFinish)
-        {
-            DistanceToWaypointNodes();
-            RaycastToFinish();
-        }
-
-
-        Debug.Log(completed);
     }
 
     void RaycastToFinish()
@@ -85,6 +86,10 @@ public class DistanceToFinishLine : MonoBehaviour
         completed = Mathf.Clamp(completed, 0, 100);
     }
 
+    void DisplayProgressionUI()
+    {
+        progressionText.text = "Progress: " + (int)completed + " %";
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -104,9 +109,10 @@ public class DistanceToFinishLine : MonoBehaviour
 
         if (other.gameObject.name == "FinishLine")
         {
+            Debug.Log("You win!");
+            other.gameObject.GetComponent<Collider>().enabled = false;
             completedFinish = true;
             completed = 100f;
-            Debug.Log("You win!");
         }
     }
 }

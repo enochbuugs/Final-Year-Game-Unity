@@ -22,13 +22,6 @@ public class TrafficAIBasic : MonoBehaviour
     public float rotSpeed = 1.0f; // how much should it rotate
     public float speed = 0.0f;
 
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
