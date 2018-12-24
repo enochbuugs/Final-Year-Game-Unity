@@ -91,11 +91,11 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
         {
             easyDamageObj.DamageTaken(10);
-            CancelInvoke();
+            //CancelInvoke();
         }
         else
         {
-            RefillHealth();
+            //RefillHealth();
         }
     }
 
@@ -107,11 +107,11 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "MeduimDamager"))
         {
             meduimDamageObj.DamageTaken(20);
-            CancelInvoke();
+            //CancelInvoke();
         }
         else
         {
-            RefillHealth();
+            //RefillHealth();
         }
     }
 
@@ -123,11 +123,11 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "HardDamager"))
         {
             hardDamageObj.DamageTaken(30);
-            CancelInvoke();
+            //CancelInvoke();
         }
         else
         {
-            RefillHealth();
+            //RefillHealth();
         }
     }
     #endregion 

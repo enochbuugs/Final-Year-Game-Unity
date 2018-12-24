@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -568,6 +568,16 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 127971818}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &127993121 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4416979354021626, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
+--- !u!4 &162064781 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4676698463445418, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,6 +847,25 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 215884414}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &239602482 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1646981259178978, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
+--- !u!64 &239602485
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 239602482}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 442255f864e16934790fbb3b49639885, type: 3}
 --- !u!1 &250006611
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,6 +2520,40 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 669027847}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &711230840 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1255947835851222, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
+--- !u!146 &711230843
+WheelCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 711230840}
+  m_Center: {x: 0, y: 0.15, z: 0}
+  m_Radius: 0.18
+  m_SuspensionSpring:
+    spring: 35000
+    damper: 4500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.3
+  m_ForceAppPointDistance: 0
+  m_Mass: 20
+  m_WheelDampingRate: 0.25
+  m_ForwardFriction:
+    m_ExtremumSlip: 0.4
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.8
+    m_AsymptoteValue: 0.5
+    m_Stiffness: 1
+  m_SidewaysFriction:
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 0.75
+    m_Stiffness: 1
+  m_Enabled: 1
 --- !u!1 &771099790
 GameObject:
   m_ObjectHideFlags: 0
@@ -2723,6 +2786,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 849027012}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &897312215 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4221157973295578, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
 --- !u!1 &929378081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2754,7 +2822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 556, y: 46}
+  m_AnchoredPosition: {x: 483, y: 46}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &986673301
@@ -3391,6 +3459,40 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1054990470}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1056480353 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1037344976657262, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
+--- !u!146 &1056480356
+WheelCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1056480353}
+  m_Center: {x: 0, y: 0.15, z: 0}
+  m_Radius: 0.18
+  m_SuspensionSpring:
+    spring: 35000
+    damper: 4500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.3
+  m_ForceAppPointDistance: 0
+  m_Mass: 20
+  m_WheelDampingRate: 0.25
+  m_ForwardFriction:
+    m_ExtremumSlip: 0.4
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.8
+    m_AsymptoteValue: 0.5
+    m_Stiffness: 1
+  m_SidewaysFriction:
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 0.75
+    m_Stiffness: 1
+  m_Enabled: 1
 --- !u!1 &1060400225
 GameObject:
   m_ObjectHideFlags: 0
@@ -4383,6 +4485,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1302593640}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1335524493 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4259734757098288, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
 --- !u!1 &1359495553
 GameObject:
   m_ObjectHideFlags: 0
@@ -5175,7 +5282,103 @@ Prefab:
       propertyPath: circuit
       value: 
       objectReference: {fileID: 474803685}
-    m_RemovedComponents: []
+    - target: {fileID: 65721272808794980, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54841179829292518, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: m_Mass
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: transformWheelFrontLeft
+      value: 
+      objectReference: {fileID: 127993121}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: transformWheelFrontRight
+      value: 
+      objectReference: {fileID: 1335524493}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: transformWheelRearLeft
+      value: 
+      objectReference: {fileID: 897312215}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: transformWheelRearRight
+      value: 
+      objectReference: {fileID: 162064781}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: wheelFrontLeft
+      value: 
+      objectReference: {fileID: 1056480356}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: wheelFrontRight
+      value: 
+      objectReference: {fileID: 1681595040}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: wheelRearLeft
+      value: 
+      objectReference: {fileID: 711230843}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: wheelRearRight
+      value: 
+      objectReference: {fileID: 1940471861}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: motorTorquePowerAI
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 65721272808794980, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: m_SteerHelper
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: brakeTorquePower
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: torquePower
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: minSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: maxSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114013245094046500, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: lookAheadForTargetOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114823062647245546, guid: f463242ba59e68243b7a693d4f0cfc18,
+        type: 2}
+      propertyPath: setMaxSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 65721272808794980, guid: f463242ba59e68243b7a693d4f0cfc18, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: f463242ba59e68243b7a693d4f0cfc18, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1612889109
@@ -5209,7 +5412,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -220, y: 7}
+  m_AnchoredPosition: {x: -111, y: 7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1617092550
@@ -5281,6 +5484,40 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1617092550}
   m_CullTransparentMesh: 0
+--- !u!1 &1681595037 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1231962720052080, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
+--- !u!146 &1681595040
+WheelCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1681595037}
+  m_Center: {x: 0, y: 0.15, z: 0}
+  m_Radius: 0.18
+  m_SuspensionSpring:
+    spring: 35000
+    damper: 4500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.3
+  m_ForceAppPointDistance: 0
+  m_Mass: 20
+  m_WheelDampingRate: 0.25
+  m_ForwardFriction:
+    m_ExtremumSlip: 0.4
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.8
+    m_AsymptoteValue: 0.5
+    m_Stiffness: 1
+  m_SidewaysFriction:
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 0.75
+    m_Stiffness: 1
+  m_Enabled: 1
 --- !u!1 &1698886362
 GameObject:
   m_ObjectHideFlags: 0
@@ -5770,6 +6007,40 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1839373469}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1940471858 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1770694637400948, guid: f463242ba59e68243b7a693d4f0cfc18,
+    type: 2}
+  m_PrefabInternal: {fileID: 1612569176}
+--- !u!146 &1940471861
+WheelCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1940471858}
+  m_Center: {x: 0, y: 0.15, z: 0}
+  m_Radius: 0.18
+  m_SuspensionSpring:
+    spring: 35000
+    damper: 4500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.3
+  m_ForceAppPointDistance: 0
+  m_Mass: 20
+  m_WheelDampingRate: 0.25
+  m_ForwardFriction:
+    m_ExtremumSlip: 0.4
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.8
+    m_AsymptoteValue: 0.5
+    m_Stiffness: 1
+  m_SidewaysFriction:
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 0.75
+    m_Stiffness: 1
+  m_Enabled: 1
 --- !u!1 &1952600280
 GameObject:
   m_ObjectHideFlags: 0
@@ -5834,7 +6105,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -306, y: -168}
+  m_AnchoredPosition: {x: -195, y: -241}
   m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1973133332
@@ -6271,7 +6542,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -220, y: 48}
+  m_AnchoredPosition: {x: -111, y: 48}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2093147713
