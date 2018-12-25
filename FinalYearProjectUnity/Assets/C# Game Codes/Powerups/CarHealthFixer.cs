@@ -18,7 +18,7 @@ public class CarHealthFixer : MonoBehaviour {
         {
             other.GetComponentInParent<PlayerHealthBar>();
             AddCarHealth(0f);
-            phb.currentHealth =100f;
+            phb.currentHealth = 100f;
             Destroy(this.gameObject);
         }
 

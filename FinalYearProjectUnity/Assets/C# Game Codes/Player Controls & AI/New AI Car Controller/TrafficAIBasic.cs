@@ -22,16 +22,19 @@ public class TrafficAIBasic : MonoBehaviour
     public WheelCollider wheelFrontLeft, wheelFrontRight;
     public WheelCollider wheelRearLeft, wheelRearRight;
 
-    public float acceleration = 5.0f; // how much torque power can it get
-    public float deacceleration = 5.0f; // how much brake power can it get
-    public float brakeAngle = 20f; // determines how cautious the car should be when braking
-    public float minSpeed = 0.0f; // the minimum speed of the car
-    public float maxSpeed = 100.0f; // the maximum speed of the car
-    public float rotSpeed = 1.0f; // how much should it rotate
-    private float speed = 0.0f;
+    public float brakeAngle; // determines how cautious the car should be when braking
+    public float rotSpeed; // how much should it rotate
 
-    public float torquePower = 100f; // the car AI variant variable factor for speed.
-    public float brakeTorquePower = 50.0f; // how much brake power can it get
+    private float maximumSpeed;
+    public float setMaxSpeed;
+    private float minimumSpeed;
+    public float setMinimumSpeed;
+
+    public float torquePower; // the car AI variant variable factor for speed.
+    public float normalTorquePower;
+    public float brakeTorquePower; // how much brake power can it get
+    public float normalBrakeTorquePower;
+
     public float steeringAngle;
     public float maxSteerAngle = 30;
     private float steering;
@@ -39,7 +42,7 @@ public class TrafficAIBasic : MonoBehaviour
     private float m_OldRotation;
     [Range(0, 1)] [SerializeField] private float m_SteerHelper;
     [SerializeField] private float m_SteerSensitivity = 0.05f;
-    public float CurrentSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
+    public float currentSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
 
     void Start()
     {
@@ -50,10 +53,10 @@ public class TrafficAIBasic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MoveCar(speed);
+        MoveCar();
         UpdateWheelMotions();
         GoToTarget();
-        Debug.Log(CurrentSpeed);
+        //Debug.Log(currentSpeed);
         //BrakingOnTurns();
     }
 
@@ -64,37 +67,30 @@ public class TrafficAIBasic : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(distance, transform.up), Time.deltaTime * rotSpeed);
     }
 
-    void BrakingOnTurns()
+    void MoveCar()
     {
-        // if the angle between the 2 forward vectors the goal and the car's forward vector is greater than 20
-        // Then reduce the speed.
-        // else continue at the same speed.
-        //if (Vector3.Angle(target.forward, transform.forward) > brakeAngle && speed > 10)
-        //{
-        //    speed = Mathf.Clamp(speed - (deacceleration * Time.deltaTime), minSpeed, maxSpeed);
-        //    Debug.Log("Braking");
-        //}
-        //else
-        //{
-        //    speed = Mathf.Clamp(speed + (acceleration * Time.deltaTime), minSpeed, maxSpeed);
-        //}
+        minimumSpeed = setMinimumSpeed;
+        maximumSpeed = setMaxSpeed;
 
-        if (Vector3.Angle(target.forward, transform.forward) > brakeAngle && CurrentSpeed > 25)
+        // if the cars speed is greater or equal to the max speed set
+        // then dont apply anymore torque power
+        if (currentSpeed >= setMaxSpeed)
         {
-            speed = Mathf.Clamp(speed - (brakeTorquePower * Time.deltaTime), minSpeed, maxSpeed);
-            Debug.Log("Braking");
+            torquePower = 0;
+            brakeTorquePower = 0;
         }
         else
         {
-            speed = Mathf.Clamp(speed + (torquePower * Time.deltaTime), minSpeed, maxSpeed);
+            torquePower = normalTorquePower;
+            brakeTorquePower = normalBrakeTorquePower;
         }
 
-        //this.transform.Translate(0, 0, speed);
-        MoveCar(speed);
-    }
+        if ((currentSpeed >= setMaxSpeed) || (currentSpeed <= setMaxSpeed) && (Vector3.Angle(target.forward, transform.forward) > brakeAngle))
+        {
+            torquePower = 0;
+            brakeTorquePower = normalBrakeTorquePower;
+        }
 
-    void MoveCar(float speed)
-    {
 
         wheelPos = transform.position;
         wheelRot = transform.rotation;

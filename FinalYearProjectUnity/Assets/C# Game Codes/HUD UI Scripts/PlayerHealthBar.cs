@@ -38,7 +38,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     void Update()
     {
         DisplayHealthBar();
-        RefillHealth();
+        //RefillHealth();
     }
 
     void SetHealthBar()
