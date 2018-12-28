@@ -7,42 +7,61 @@ public class TrafficAIBasic : MonoBehaviour
 
     // TESTING VARIABLES TO GET ACCURACY OF THE AI CAR 
     // TO DO LATER..
-    // ADD THE WHEELCOLLIDERS TO AI CARS
+    // ADD THE WHEELCOLLIDERS TO AI CARS (DONE)
+    // ADD AVOIDANCE BEHAVIOUR
     // SECONDLY GET IT TO PATHFIND AFTER TESTING THIS CODE THROUGHLY
     //.........
+
+    [Header("AI Follow Target")]
     public Transform target; // the target the AI will follow
     private Vector3 lookAtTarget; // holds the info to look at the target we should follow...
     private Vector3 distance; // the distance between the player and target it has to follow..
     private Vector3 wheelPos;
     private Quaternion wheelRot;
 
-    public Rigidbody rb;
-    public Transform transformWheelFrontLeft, transformWheelFrontRight;
-    public Transform transformWheelRearLeft, transformWheelRearRight;
-    public WheelCollider wheelFrontLeft, wheelFrontRight;
-    public WheelCollider wheelRearLeft, wheelRearRight;
+    [Header("AI Avoidance Properties")]
+    public Transform obstacle;
 
+
+    [Header("Rigidbody/Wheelcolliders")]
+    public Rigidbody rb;
+
+    [Header("Wheel Transforms")]
+    public Transform transformWheelFrontLeft;
+    public Transform transformWheelFrontRight;
+    public Transform transformWheelRearLeft;
+    public Transform transformWheelRearRight;
+
+    [Header("Wheelcolliders")]
+    public WheelCollider wheelFrontLeft;
+    public WheelCollider wheelFrontRight;
+    public WheelCollider wheelRearLeft;
+    public WheelCollider wheelRearRight;
+
+    [Header("AI Car Properties")]
+    public float setMaxSpeed;
+    public float setMinimumSpeed;
     public float brakeAngle; // determines how cautious the car should be when braking
     public float rotSpeed; // how much should it rotate
-
-    private float maximumSpeed;
-    public float setMaxSpeed;
-    private float minimumSpeed;
-    public float setMinimumSpeed;
-
     public float torquePower; // the car AI variant variable factor for speed.
     public float normalTorquePower;
     public float brakeTorquePower; // how much brake power can it get
     public float normalBrakeTorquePower;
-
     public float steeringAngle;
     public float maxSteerAngle = 30;
+
     private float steering;
+    private float maximumSpeed;
+    private float minimumSpeed;
+    public float currentSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
     public float CurrentSteerAngle { get { return steeringAngle; } }
     private float m_OldRotation;
+
     [Range(0, 1)] [SerializeField] private float m_SteerHelper;
     [SerializeField] private float m_SteerSensitivity = 0.05f;
-    public float currentSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
+    
+
+
 
     void Start()
     {
@@ -54,10 +73,9 @@ public class TrafficAIBasic : MonoBehaviour
     void Update()
     {
         MoveCar();
+        Avoidance();
         UpdateWheelMotions();
         GoToTarget();
-        //Debug.Log(currentSpeed);
-        //BrakingOnTurns();
     }
 
     void GoToTarget()
@@ -114,6 +132,49 @@ public class TrafficAIBasic : MonoBehaviour
 
         //SteeringHelp();
         WheelMeshPosRot();
+    }
+
+    void Avoidance()
+    {
+        float raycastLength = 190f;
+        float raycastSpacing = 2.5f;
+        RaycastHit hit;
+        Ray newRay = new Ray(this.transform.position, transform.forward);
+
+
+        Vector3 direction = (obstacle.position - this.transform.position).normalized;
+        Vector3 leftRay = transform.position - transform.right * raycastSpacing;
+        Vector3 rightRay = transform.position + transform.right * raycastSpacing;
+
+
+        Vector3 L = transform.position;
+        Vector3 R = transform.position;
+
+        L.x -= 2;
+        R.x += 2;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, raycastLength))
+        {
+            if (hit.transform != transform)
+            {
+                direction += hit.normal * 1;
+                Debug.DrawRay(transform.position, hit.point, Color.red);
+            }
+        }
+
+   
+        //if (Physics.Raycast(L, transform.forward, out hit, raycastLength))
+        //{
+        //    if (hit.transform != transform)
+        //    {
+        //        direction += hit.normal * 1;
+        //        Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
+        //    }
+        //}
+
+
+        Quaternion rot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime);
     }
 
     void WheelMeshPosRot()

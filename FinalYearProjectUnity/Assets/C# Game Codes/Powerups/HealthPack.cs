@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarHealthFixer : MonoBehaviour {
+public class HealthPack : MonoBehaviour {
 
     public GameObject player;
     private PlayerHealthBar phb;

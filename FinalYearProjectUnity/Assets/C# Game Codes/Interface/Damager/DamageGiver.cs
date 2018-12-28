@@ -27,6 +27,8 @@ public class DamageGiver : MonoBehaviour, IDamageable {
         Debug.Log("I have taken: " + amount);
     }
 
+
+
     void RetrievePlayerCarHealth()
     {
         pb = playerCar.GetComponent<PlayerHealthBar>();

@@ -7,26 +7,43 @@ public class Shield : MonoBehaviour {
     public GameObject player;
     PlayerHealthBar phb;
 
-	// Use this for initialization
-	void Start () {
+
+    // WORK IN PROGRESS NOT FULLY IMPLEMENTED
+    // JUST CURRENTLY PUTS THE PLAYER'S HEALTH BACK TO 100 
+
+    public float GetDamage
+    {
+        get
+        {
+            return phb.currentHealth;
+        }
+
+        set
+        {
+            phb.currentHealth = value;
+        }
+    }
+
+    public void DamageTaken(float amount)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    // Use this for initialization
+    void Start() {
 
         phb = player.GetComponent<PlayerHealthBar>();
-	}
+    }
 
     void OnTriggerEnter(Collider other)
     {
         if ((other.gameObject == player))
         {
-            phb = other.GetComponentInParent<PlayerHealthBar>();
+            phb = player.GetComponent<PlayerHealthBar>();
             phb.currentHealth = phb.maxHealth;
-            StartCoroutine(ShieldTimer(other));
+            phb.StartCoroutine(phb.Shield());
             Destroy(this.gameObject);
         }
-    }
-
-    IEnumerator ShieldTimer (Collider Player)
-    {
-        yield return new WaitForSeconds(10);
     }
 
 }

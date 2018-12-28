@@ -8,6 +8,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     public float maxHealth = 100; // starting with 100 health
     public float currentHealth;
     public Image healthBar;
+    public bool hasInvicibility = false;
 
     public float GetDamage
     {
@@ -65,7 +66,6 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-
         }
     }
 
@@ -130,12 +130,79 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
             //RefillHealth();
         }
     }
+
+    void NoDamageCollisionEasy(Collision collision)
+    {
+        GameObject hitObject = collision.gameObject;
+        IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
+        {
+            easyDamageObj.DamageTaken(0);
+            //CancelInvoke();
+        }
+        else
+        {
+            //RefillHealth();
+        }
+    }
+
+    void NoDamageCollisionMeduim(Collision collision)
+    {
+        GameObject hitObject = collision.gameObject;
+        IDamageable meduimDamageObj = hitObject.GetComponent<IDamageable>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "MeduimDamager"))
+        {
+            meduimDamageObj.DamageTaken(0);
+            //CancelInvoke();
+        }
+        else
+        {
+            //RefillHealth();
+        }
+    }
+
+    void NoDamageCollisionHard(Collision collision)
+    {
+        GameObject hitObject = collision.gameObject;
+        IDamageable hardDamageObj = hitObject.GetComponent<IDamageable>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "HardDamager"))
+        {
+            hardDamageObj.DamageTaken(0);
+            //CancelInvoke();
+        }
+        else
+        {
+            //RefillHealth();
+        }
+    }
     #endregion 
 
     private void OnCollisionEnter(Collision collision)
     {
-        DamageCollisionEasy(collision);
-        DamageCollisionMeduim(collision);
-        DamageCollisionHard(collision);
+        if (!hasInvicibility)
+        {
+            hasInvicibility = false;
+            DamageCollisionEasy(collision);
+            DamageCollisionMeduim(collision);
+            DamageCollisionHard(collision);
+        }
+
+        if (hasInvicibility)
+        {
+            hasInvicibility = true;
+            NoDamageCollisionEasy(collision);
+            NoDamageCollisionMeduim(collision);
+            NoDamageCollisionHard(collision);
+        }
+    }
+
+    public IEnumerator Shield()
+    {
+        hasInvicibility = true;
+        yield return new WaitForSeconds(5f);
+        hasInvicibility = false;
     }
 }
