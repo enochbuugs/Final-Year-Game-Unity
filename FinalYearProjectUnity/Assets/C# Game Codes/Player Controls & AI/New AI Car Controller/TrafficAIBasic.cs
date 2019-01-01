@@ -136,45 +136,53 @@ public class TrafficAIBasic : MonoBehaviour
 
     void Avoidance()
     {
-        float raycastLength = 190f;
-        float raycastSpacing = 2.5f;
+        float raycastLength = 10f;
+        float raycastAngle = 20f;
+
         RaycastHit hit;
-        Ray newRay = new Ray(this.transform.position, transform.forward);
+        Ray centreRay = new Ray(this.transform.position, transform.forward);
+        Ray leftRay = new Ray(this.transform.position, Quaternion.AngleAxis(-raycastAngle, transform.up) * transform.forward);
+        Ray rightRay = new Ray(this.transform.position, Quaternion.AngleAxis(raycastAngle, transform.up) * transform.forward);
 
 
         Vector3 direction = (obstacle.position - this.transform.position).normalized;
-        Vector3 leftRay = transform.position - transform.right * raycastSpacing;
-        Vector3 rightRay = transform.position + transform.right * raycastSpacing;
 
 
-        Vector3 L = transform.position;
-        Vector3 R = transform.position;
-
-        L.x -= 2;
-        R.x += 2;
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, raycastLength))
+        //forward ray
+        if (Physics.Raycast(centreRay, out hit, raycastLength))
         {
             if (hit.transform != transform)
             {
-                direction += hit.normal * 1;
-                Debug.DrawRay(transform.position, hit.point, Color.red);
+                //direction += hit.normal * 1;
+                Debug.DrawRay(centreRay.origin, centreRay.direction * raycastLength, Color.red);
             }
         }
 
-   
-        //if (Physics.Raycast(L, transform.forward, out hit, raycastLength))
-        //{
-        //    if (hit.transform != transform)
-        //    {
-        //        direction += hit.normal * 1;
-        //        Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
-        //    }
-        //}
+        //left ray
+        if (Physics.Raycast(leftRay, out hit, raycastLength))
+        {
+            if (hit.transform != transform)
+            {
+                //direction += hit.normal * 1;
+                Debug.DrawRay(leftRay.origin, leftRay.direction * raycastLength, Color.blue);
+            }
+        }
+
+        //right ray
+        if (Physics.Raycast(rightRay, out hit, raycastLength))
+        {
+            if (hit.transform != transform)
+            {
+                //direction += hit.normal * 1;
+                Debug.DrawRay(rightRay.origin, rightRay.direction * raycastLength, Color.yellow);
+            }
+        }
 
 
-        Quaternion rot = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime);
+
+
+        //Quaternion rot = Quaternion.LookRotation(direction);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime);
     }
 
     void WheelMeshPosRot()

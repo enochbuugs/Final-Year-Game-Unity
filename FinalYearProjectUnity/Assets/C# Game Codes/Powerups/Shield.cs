@@ -8,8 +8,7 @@ public class Shield : MonoBehaviour {
     PlayerHealthBar phb;
 
 
-    // WORK IN PROGRESS NOT FULLY IMPLEMENTED
-    // JUST CURRENTLY PUTS THE PLAYER'S HEALTH BACK TO 100 
+    // FULLY IMPLEMENTED SHIELD WORKING
 
     public float GetDamage
     {

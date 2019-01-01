@@ -11,13 +11,18 @@ public class PlayerCarController : MonoBehaviour {
     private float steeringAngle;
     private float maxSteerAngle = 30;
     private float maxSpeed;
+    private float reverseSpeed;
     public float setMaxSpeed;
+    public float setMaxReverseSpeed;
     public float actualSpeed { get { return rb.velocity.magnitude * 2.23693629f; } }
     public float motorTorquePower = 50;
     public float brakeTorquePower = 100;
     public float brakingPower = 50f;
 
     // Braking Bools
+    public bool carForward;
+    public bool carReverse;
+    public bool isCarMovingForward;
     private bool isHandBraking;
     private bool isBraking;
 
@@ -63,10 +68,11 @@ public class PlayerCarController : MonoBehaviour {
 
     void SetInput()
     {
-       // initialize and set up inputs for the car... 
-       // moving forwards and backwards using the WASD or Arrow Keys
-       verticalMovement = Input.GetAxis("Vertical");
-       horizontalMovement = Input.GetAxis("Horizontal");
+        // initialize and set up inputs for the car... 
+        // moving forwards and backwards using the WASD or Arrow Keys
+
+        verticalMovement = Input.GetAxis("Vertical");
+        horizontalMovement = Input.GetAxis("Horizontal");
     }
 
     void SteerCar()
@@ -81,6 +87,7 @@ public class PlayerCarController : MonoBehaviour {
     void AccelerateCar()
     {
         maxSpeed = setMaxSpeed;
+        reverseSpeed = setMaxReverseSpeed;
 
         if (actualSpeed >= setMaxSpeed)
         {
@@ -93,6 +100,18 @@ public class PlayerCarController : MonoBehaviour {
         wheelFrontRight.motorTorque = motorTorquePower * verticalMovement;
         wheelRearLeft.motorTorque = motorTorquePower * verticalMovement;
         wheelRearRight.motorTorque = motorTorquePower * verticalMovement;
+
+        if (verticalMovement == 1)
+        {
+            isCarMovingForward = true;
+        }
+
+        if (verticalMovement == -1)
+        {
+            isCarMovingForward = false;
+            //verticalMovement = 0;
+        }
+
     }
 
     void NewNitroSystem()

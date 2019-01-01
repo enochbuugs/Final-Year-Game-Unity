@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DistanceToFinishLine : MonoBehaviour
 {
+    private PlayerScoreManager psm;
     public Text progressionText;
     public GameObject playerCarBumper;
     public GameObject[] waypoints;
@@ -71,6 +72,10 @@ public class DistanceToFinishLine : MonoBehaviour
                 distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
                 completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
                 completed = Mathf.Clamp(completed, 0, 100);
+                psm = GetComponent<PlayerScoreManager>();
+                psm.isRaceFinished = true;
+                //psm.currentScore = psm.finalScore;
+                
             }
             Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
         }

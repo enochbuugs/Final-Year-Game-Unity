@@ -9,6 +9,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     public float currentHealth;
     public Image healthBar;
     public bool hasInvicibility = false;
+    public bool canTakeDamage = false;
 
     public float GetDamage
     {
@@ -90,6 +91,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
         {
+            canTakeDamage = true;
             easyDamageObj.DamageTaken(10);
             //CancelInvoke();
         }
@@ -185,6 +187,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (!hasInvicibility)
         {
             hasInvicibility = false;
+            //canTakeDamage = true;
             DamageCollisionEasy(collision);
             DamageCollisionMeduim(collision);
             DamageCollisionHard(collision);
@@ -193,16 +196,28 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         if (hasInvicibility)
         {
             hasInvicibility = true;
+            //canTakeDamage = false;
             NoDamageCollisionEasy(collision);
             NoDamageCollisionMeduim(collision);
             NoDamageCollisionHard(collision);
         }
+
+        //if (canTakeDamage)
+        //{
+        //    canTakeDamage = true;
+        //    DamageCollisionEasy(collision);
+        //    DamageCollisionMeduim(collision);
+        //    DamageCollisionHard(collision);
+        //}     
+
     }
 
     public IEnumerator Shield()
     {
         hasInvicibility = true;
+        //canTakeDamage = false;
         yield return new WaitForSeconds(5f);
         hasInvicibility = false;
+        //canTakeDamage = true;
     }
 }
