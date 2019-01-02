@@ -1163,6 +1163,7 @@ GameObject:
   - component: {fileID: 294450065}
   - component: {fileID: 294450064}
   - component: {fileID: 294450063}
+  - component: {fileID: 294450068}
   m_Layer: 0
   m_Name: HardDamager
   m_TagString: HardDamager
@@ -1177,7 +1178,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 294450061}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.89, y: 51.218365, z: -77.42}
+  m_LocalPosition: {x: 30.96, y: 51.218365, z: -77.42}
   m_LocalScale: {x: 2.99152, y: 2.99152, z: 2.99152}
   m_Children: []
   m_Father: {fileID: 1721061323}
@@ -1264,6 +1265,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 294450061}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &294450068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 294450061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a10f823d0a3d7b940b57808cee62cefe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCar: {fileID: 649315704}
 --- !u!1 &398606381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2529,8 +2542,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1363192313}
+  score: 1
   currentScore: 0
   finalScore: 0
+  maxScore: 1000
   isRaceFinished: 0
 --- !u!1 &650019768
 GameObject:
@@ -5387,6 +5402,7 @@ GameObject:
   - component: {fileID: 1597808487}
   - component: {fileID: 1597808486}
   - component: {fileID: 1597808485}
+  - component: {fileID: 1597808490}
   m_Layer: 0
   m_Name: MeduimDamager
   m_TagString: MeduimDamager
@@ -5488,6 +5504,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1597808483}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1597808490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1597808483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a10f823d0a3d7b940b57808cee62cefe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCar: {fileID: 649315704}
 --- !u!1 &1598107636
 GameObject:
   m_ObjectHideFlags: 0
@@ -6600,6 +6628,7 @@ GameObject:
   - component: {fileID: 2000286401}
   - component: {fileID: 2000286405}
   - component: {fileID: 2000286406}
+  - component: {fileID: 2000286407}
   m_Layer: 0
   m_Name: LightDamager
   m_TagString: LightDamager
@@ -6698,6 +6727,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 630c03076d3488b4c95d64b5db28f587, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCar: {fileID: 649315704}
+--- !u!114 &2000286407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2000286400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a10f823d0a3d7b940b57808cee62cefe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerCar: {fileID: 649315704}

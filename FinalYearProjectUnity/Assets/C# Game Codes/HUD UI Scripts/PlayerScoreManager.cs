@@ -8,10 +8,10 @@ public class PlayerScoreManager : MonoBehaviour {
     PlayerCarController pc;
     PlayerHealthBar phb;
     public Text scoreText;
-    float score = 1;
+    public float score = 1;
     public float currentScore;
     public float finalScore;
-    private float maxScore;
+    public float maxScore = 1000f;
     public bool isRaceFinished;
 
     // Use this for initialization
@@ -23,24 +23,28 @@ public class PlayerScoreManager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        ClampScore();
         DisplayScore();
         IncrementScore(5);
-        DecreaseScore();
         GetFinalScore();
     }
 
-    void SetScore()
+    public void SetScore()
     {
         currentScore = score;
-        currentScore = Mathf.Clamp(currentScore, 0, 1000);
     }
 
-    void DisplayScore()
+    void ClampScore()
+    {
+        currentScore = Mathf.Clamp(currentScore, 0, Mathf.Infinity);
+    }
+
+    public void DisplayScore()
     {
         scoreText.text = "Score: " + (int)currentScore;
     }
 
-    void IncrementScore(float increaseRate)
+    public void IncrementScore(float increaseRate)
     {
         pc = GetComponent<PlayerCarController>();
 
@@ -49,18 +53,6 @@ public class PlayerScoreManager : MonoBehaviour {
             currentScore += increaseRate * Time.deltaTime;
             isRaceFinished = false;
         }
-    }
-
-    void DecreaseScore()
-    {
-        phb = GetComponent<PlayerHealthBar>();
-
-        if (phb.canTakeDamage)
-        {
-            currentScore --;
-            //phb.canTakeDamage = true;
-        }
-
     }
 
     void GetFinalScore()

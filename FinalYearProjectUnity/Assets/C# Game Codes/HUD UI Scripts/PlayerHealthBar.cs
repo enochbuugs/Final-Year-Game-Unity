@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealthBar : MonoBehaviour, IDamageable {
+public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
 
+    PlayerScoreManager psm;
+    PlayerCarController pc;
     public float maxHealth = 100; // starting with 100 health
     public float currentHealth;
     public Image healthBar;
@@ -24,6 +26,25 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         }
     }
 
+    public float getScoreReduction
+    {
+
+        get
+        {
+            return psm.currentScore; 
+        }
+
+        set
+        {
+            psm.currentScore = value;
+        }
+    }
+
+    public void ScoreReduction(float amount)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public void DamageTaken(float amount)
     {
         throw new System.NotImplementedException();
@@ -41,6 +62,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     {
         DisplayHealthBar();
         //RefillHealth();
+        ReIncrementScore();
     }
 
     void SetHealthBar()
@@ -71,9 +93,38 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     }
 
 
+
+
     void RegenerateHealth(float rate)
     {
         currentHealth += rate;
+    }
+
+    void ReIncrementScore()
+    {
+        psm = GetComponent<PlayerScoreManager>();
+        pc = GetComponent<PlayerCarController>();
+
+        if (psm.currentScore <= psm.maxScore && pc.isCarMovingForward )
+        {
+            CancelInvoke();
+        }
+        else
+        {
+            Invoke("WaitToIncrementScore", 10);
+        }
+    }
+
+    void RestartIncrementScore()
+    {
+        psm = GetComponent<PlayerScoreManager>();
+        psm.IncrementScore(5);
+    }
+    
+    void WaitToIncrementScore()
+    {
+        RestartIncrementScore();
+        Debug.Log("Wait 10 seconds to refill health");
     }
 
     void WaitToRefillHealthBar()
@@ -83,21 +134,25 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     }
 
 
+
+
     #region ("Damage Level Collision Methods")
     void DamageCollisionEasy(Collision collision)
     {
         GameObject hitObject = collision.gameObject;
         IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager easyScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
         {
             canTakeDamage = true;
             easyDamageObj.DamageTaken(10);
-            //CancelInvoke();
+            easyScoreDamageObj.ScoreReduction(10);
+            CancelInvoke();
         }
         else
         {
-            //RefillHealth();
+            ReIncrementScore();
         }
     }
 
@@ -105,15 +160,17 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     {
         GameObject hitObject = collision.gameObject;
         IDamageable meduimDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager meduimScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "MeduimDamager"))
         {
             meduimDamageObj.DamageTaken(20);
-            //CancelInvoke();
+            meduimScoreDamageObj.ScoreReduction(20);
+            CancelInvoke();
         }
         else
         {
-            //RefillHealth();
+            ReIncrementScore();
         }
     }
 
@@ -121,15 +178,17 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     {
         GameObject hitObject = collision.gameObject;
         IDamageable hardDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager hardScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "HardDamager"))
         {
             hardDamageObj.DamageTaken(30);
-            //CancelInvoke();
+            hardScoreDamageObj.ScoreReduction(30);
+            CancelInvoke();
         }
         else
         {
-            //RefillHealth();
+            ReIncrementScore();
         }
     }
 
@@ -137,10 +196,12 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     {
         GameObject hitObject = collision.gameObject;
         IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager easyScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
         {
             easyDamageObj.DamageTaken(0);
+            easyScoreDamageObj.ScoreReduction(0);
             //CancelInvoke();
         }
         else
@@ -153,10 +214,12 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     {
         GameObject hitObject = collision.gameObject;
         IDamageable meduimDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager meduimScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "MeduimDamager"))
         {
             meduimDamageObj.DamageTaken(0);
+            meduimScoreDamageObj.ScoreReduction(0);
             //CancelInvoke();
         }
         else
@@ -169,10 +232,12 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
     {
         GameObject hitObject = collision.gameObject;
         IDamageable hardDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager hardScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "HardDamager"))
         {
             hardDamageObj.DamageTaken(0);
+            hardScoreDamageObj.ScoreReduction(0);
             //CancelInvoke();
         }
         else
@@ -200,15 +265,7 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
             NoDamageCollisionEasy(collision);
             NoDamageCollisionMeduim(collision);
             NoDamageCollisionHard(collision);
-        }
-
-        //if (canTakeDamage)
-        //{
-        //    canTakeDamage = true;
-        //    DamageCollisionEasy(collision);
-        //    DamageCollisionMeduim(collision);
-        //    DamageCollisionHard(collision);
-        //}     
+        }   
 
     }
 
@@ -220,4 +277,5 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable {
         hasInvicibility = false;
         //canTakeDamage = true;
     }
+
 }
