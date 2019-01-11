@@ -101,11 +101,13 @@ public class PlayerCarController : MonoBehaviour {
         wheelRearLeft.motorTorque = motorTorquePower * verticalMovement;
         wheelRearRight.motorTorque = motorTorquePower * verticalMovement;
 
+        // if the car is moving forward the bool is set to true
         if (verticalMovement == 1)
         {
             isCarMovingForward = true;
         }
 
+        // if the car is moving backwards and not forward then set it to false
         if (verticalMovement == -1)
         {
             isCarMovingForward = false;

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1178,7 +1178,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 294450061}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 30.96, y: 51.218365, z: -77.42}
+  m_LocalPosition: {x: 18.24, y: 51.218365, z: -100.41}
   m_LocalScale: {x: 2.99152, y: 2.99152, z: 2.99152}
   m_Children: []
   m_Father: {fileID: 1721061323}
@@ -2544,9 +2544,14 @@ MonoBehaviour:
   scoreText: {fileID: 1363192313}
   score: 1
   currentScore: 0
+  pausedScore: 0
   finalScore: 0
   maxScore: 1000
+  easyPenaltyTimer: 5
+  meduimPenaltyTimer: 10
+  hardPenaltyTimer: 15
   isRaceFinished: 0
+  isScorePaused: 0
 --- !u!1 &650019768
 GameObject:
   m_ObjectHideFlags: 0
@@ -3451,7 +3456,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4194130135122436, guid: acf6b353ca27d374d9222ae2026d45c4, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -18.7
+      value: -21.92
       objectReference: {fileID: 0}
     - target: {fileID: 4194130135122436, guid: acf6b353ca27d374d9222ae2026d45c4, type: 2}
       propertyPath: m_LocalRotation.x
@@ -3557,6 +3562,16 @@ Prefab:
         type: 2}
       propertyPath: setMaxReverseSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114301952652538158, guid: acf6b353ca27d374d9222ae2026d45c4,
+        type: 2}
+      propertyPath: scoreTimer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114301952652538158, guid: acf6b353ca27d374d9222ae2026d45c4,
+        type: 2}
+      propertyPath: timer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64598386207565992, guid: acf6b353ca27d374d9222ae2026d45c4, type: 2}
@@ -5417,7 +5432,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1597808483}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 51.218365, z: -83.99}
+  m_LocalPosition: {x: 33.58, y: 51.218365, z: -100.96}
   m_LocalScale: {x: 2.99152, y: 2.99152, z: 2.99152}
   m_Children: []
   m_Father: {fileID: 1721061323}
@@ -6697,7 +6712,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2000286400}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 22.82, y: 51.218365, z: -88.37}
+  m_LocalPosition: {x: 8.14, y: 51.218365, z: -96.07}
   m_LocalScale: {x: 2.9915187, y: 2.9915187, z: 2.9915187}
   m_Children: []
   m_Father: {fileID: 1721061323}

@@ -13,6 +13,8 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
     public bool hasInvicibility = false;
     public bool canTakeDamage = false;
 
+    public float timer;
+
     public float GetDamage
     {
         get
@@ -56,13 +58,11 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
         SetHealthBar();
     }
 
-
     // Update is called once per frame
     void Update()
     {
         DisplayHealthBar();
         //RefillHealth();
-        ReIncrementScore();
     }
 
     void SetHealthBar()
@@ -91,40 +91,9 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
             currentHealth = 0;
         }
     }
-
-
-
-
     void RegenerateHealth(float rate)
     {
         currentHealth += rate;
-    }
-
-    void ReIncrementScore()
-    {
-        psm = GetComponent<PlayerScoreManager>();
-        pc = GetComponent<PlayerCarController>();
-
-        if (psm.currentScore <= psm.maxScore && pc.isCarMovingForward )
-        {
-            CancelInvoke();
-        }
-        else
-        {
-            Invoke("WaitToIncrementScore", 10);
-        }
-    }
-
-    void RestartIncrementScore()
-    {
-        psm = GetComponent<PlayerScoreManager>();
-        psm.IncrementScore(5);
-    }
-    
-    void WaitToIncrementScore()
-    {
-        RestartIncrementScore();
-        Debug.Log("Wait 10 seconds to refill health");
     }
 
     void WaitToRefillHealthBar()
@@ -133,6 +102,38 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
         Debug.Log("Wait 5 seconds to refill health");
     }
 
+    IEnumerator UnpauseScoreEasy()
+    {
+        psm = GetComponent<PlayerScoreManager>();
+        psm.isScorePaused = true;
+        psm = psm.GetComponent<PlayerScoreManager>();
+        psm.pausedScore = psm.currentScore;
+        yield return new WaitForSeconds(psm.easyPenaltyTimer);
+        psm.currentScore = psm.pausedScore;
+        psm.isScorePaused = false;
+    }
+
+    IEnumerator UnpauseScoreMeduim()
+    {
+        psm = GetComponent<PlayerScoreManager>();
+        psm.isScorePaused = true;
+        psm = psm.GetComponent<PlayerScoreManager>();
+        psm.pausedScore = psm.currentScore;
+        yield return new WaitForSeconds(psm.meduimPenaltyTimer);
+        psm.currentScore = psm.pausedScore;
+        psm.isScorePaused = false;
+    }
+
+    IEnumerator UnpauseScoreHard()
+    {
+        psm = GetComponent<PlayerScoreManager>();
+        psm.isScorePaused = true;
+        psm = psm.GetComponent<PlayerScoreManager>();
+        psm.pausedScore = psm.currentScore;
+        yield return new WaitForSeconds(psm.hardPenaltyTimer);
+        psm.currentScore = psm.pausedScore;
+        psm.isScorePaused = false;
+    }
 
 
 
@@ -143,16 +144,12 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
         IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
         IScoreDamager easyScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
 
-        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager"))
+        if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "LightDamager") /*&& pc.isCarMovingForward == true*/)
         {
             canTakeDamage = true;
-            easyDamageObj.DamageTaken(10);
-            easyScoreDamageObj.ScoreReduction(10);
-            CancelInvoke();
-        }
-        else
-        {
-            ReIncrementScore();
+            easyDamageObj.DamageTaken(5f);
+            easyScoreDamageObj.ScoreReduction(10f);
+            StartCoroutine(UnpauseScoreEasy());
         }
     }
 
@@ -164,13 +161,9 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "MeduimDamager"))
         {
-            meduimDamageObj.DamageTaken(20);
-            meduimScoreDamageObj.ScoreReduction(20);
-            CancelInvoke();
-        }
-        else
-        {
-            ReIncrementScore();
+            meduimDamageObj.DamageTaken(10f);
+            meduimScoreDamageObj.ScoreReduction(20f);
+            StartCoroutine(UnpauseScoreMeduim());
         }
     }
 
@@ -182,13 +175,9 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
 
         if (hitObject.GetComponent<IDamageable>() != null && (collision.collider.tag == "HardDamager"))
         {
-            hardDamageObj.DamageTaken(30);
-            hardScoreDamageObj.ScoreReduction(30);
-            CancelInvoke();
-        }
-        else
-        {
-            ReIncrementScore();
+            hardDamageObj.DamageTaken(15f);
+            hardScoreDamageObj.ScoreReduction(30f);
+            StartCoroutine(UnpauseScoreHard());
         }
     }
 
@@ -265,9 +254,11 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
             NoDamageCollisionEasy(collision);
             NoDamageCollisionMeduim(collision);
             NoDamageCollisionHard(collision);
-        }   
+        }
+        
 
     }
+
 
     public IEnumerator Shield()
     {
