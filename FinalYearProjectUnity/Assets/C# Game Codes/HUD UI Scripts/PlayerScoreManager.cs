@@ -11,7 +11,7 @@ public class PlayerScoreManager : MonoBehaviour {
 
     // score variables
     public Text scoreText;
-    public float score = 1;
+    private float score = 0;
     public float currentScore;
     public float pausedScore;
     public float finalScore;
@@ -23,8 +23,10 @@ public class PlayerScoreManager : MonoBehaviour {
     public float hardPenaltyTimer = 15f;
 
     // booleans
-    public bool isRaceFinished;
     public bool isScorePaused;
+    public bool hasTriggeredStartLine;
+
+    DistanceToFinishLine dtfl;
 
     // Use this for initialization
     void Start()
@@ -68,10 +70,29 @@ public class PlayerScoreManager : MonoBehaviour {
     {
         pc = GetComponent<PlayerCarController>();
 
-        if (pc.isCarMovingForward && !isRaceFinished)
+        dtfl = GetComponent<DistanceToFinishLine>();
+
+        // if the car is moving forward
+        // the race has not been completed
+        // and the start line has not been triggered
+        // do not increment the score..
+        // avoids cheating
+
+        if (pc.isCarMovingForward && !dtfl.completedFinish && !hasTriggeredStartLine)
         {
+            hasTriggeredStartLine = false;
+            currentScore += 0 * Time.deltaTime;
+            dtfl.completedFinish = false;
+        }
+
+        // if the car is moving, the race is not completed and has detected that the start line has been triggered
+        // increment the score..
+        
+        if (pc.isCarMovingForward && !dtfl.completedFinish && hasTriggeredStartLine)
+        {
+            hasTriggeredStartLine = true;
             currentScore += increaseRate * Time.deltaTime;
-            isRaceFinished = false;
+            dtfl.completedFinish = false;
         }
     }
 
@@ -79,9 +100,11 @@ public class PlayerScoreManager : MonoBehaviour {
     {
         pc = GetComponent<PlayerCarController>();
 
-        if (pc.isCarMovingForward && isRaceFinished)
+        dtfl = GetComponent<DistanceToFinishLine>();
+
+        if (pc.isCarMovingForward && dtfl.completedFinish)
         {
-            isRaceFinished = true;
+            dtfl.completedFinish = true;
             finalScore = currentScore;
         }
     }

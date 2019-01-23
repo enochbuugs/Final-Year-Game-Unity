@@ -84,9 +84,5 @@ public class PathFindingFollow : MonoBehaviour {
             transform.Translate(0, 0, speed * Time.deltaTime);
 
         }
-
-
-
-
 	}
 }

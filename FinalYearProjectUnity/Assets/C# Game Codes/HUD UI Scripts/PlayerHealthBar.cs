@@ -255,8 +255,6 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
             NoDamageCollisionMeduim(collision);
             NoDamageCollisionHard(collision);
         }
-        
-
     }
 
 

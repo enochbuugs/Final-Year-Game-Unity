@@ -16,7 +16,7 @@ public class DistanceToFinishLine : MonoBehaviour
     private float completed = 0; // how much have you completed of the track
     private float raycastLength = 20f;
     private int currentWaypointIndex = 0;
-    private bool completedFinish = false;
+    public bool completedFinish = false;
 
     // Use this for initialization
     void Start()
@@ -72,10 +72,6 @@ public class DistanceToFinishLine : MonoBehaviour
                 distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
                 completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
                 completed = Mathf.Clamp(completed, 0, 100);
-                psm = GetComponent<PlayerScoreManager>();
-                psm.isRaceFinished = true;
-                //psm.currentScore = psm.finalScore;
-                
             }
             Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
         }
@@ -104,19 +100,31 @@ public class DistanceToFinishLine : MonoBehaviour
 
     void TriggerWaypoints(Collider other)
     {
-        if ((other.gameObject.tag == "Waypoint") /*&& (completed <= 30)*/)
+        // if the player touches the start line 
+        // they can start incrementing their score by driving forward
+        // start line bool is responsible for incrementing score till the finish line reached...
+
+        if (other.gameObject.tag == "StartLine")
         {
             Debug.Log("Triggered " +other.gameObject.name);
-            other.gameObject.GetComponent<Collider>().enabled = false;
-            currentWaypointIndex++;
-            //currentWayPoint = waypoints[currentWaypointIndex];
+            other.gameObject.GetComponent<Collider>().enabled = false; // disable collider
+            currentWaypointIndex++; // go and find the finish line 
+            psm = GetComponent<PlayerScoreManager>();
+            psm.hasTriggeredStartLine = true; // set the bool to be true to start incrementing score
         }
+
+        // if the player touches the finish line
+        // disable the start line bool which stops incrementing score
+        // set the race completion bool to true
+        // as long as the race has been 100% complete 
 
         if (other.gameObject.name == "FinishLine")
         {
+            psm = GetComponent<PlayerScoreManager>();
             Debug.Log("You win!");
             other.gameObject.GetComponent<Collider>().enabled = false;
-            completedFinish = true;
+            completedFinish = true; // the race is now finished
+            psm.hasTriggeredStartLine = false; // we are no longer incrementing score from when we hit the start line
             completed = 100f;
         }
     }
