@@ -7,16 +7,13 @@ public class DistanceToFinishLine : MonoBehaviour
 {
     private PlayerScoreManager psm;
     public Text progressionText;
-    public GameObject playerCarBumper;
-    public GameObject[] waypoints;
-
-
-    public GameObject[] splines;
-    public float[] splineDistances;
-
 
     public GameObject currentWayPoint;
-
+    public GameObject playerCarBumper;
+    public GameObject[] waypoints;
+    public GameObject[] splines;
+    public float[] splineDistances;
+    
     public float distanceToWaypoint;
     private float lengthOfTrack;
     public float completed = 0; // how much have you completed of the track
@@ -24,42 +21,35 @@ public class DistanceToFinishLine : MonoBehaviour
     private int currentWaypointIndex = 0;
     public bool completedFinish = false;
 
-    float trackLength = 0f;
-    float waypointCompletionLength = 0;
+    private float trackLength = 0f;
+    private float splineNodesCompletionLength = 0;
     
 
     // Use this for initialization
     void Start()
     {
-
-        splineDistances = new float[splines.Length];
+        CalculateSplineTrackDistance();
         GetLengthOfTrack();
-
-        for (int i = 0; i < splines.Length-1; i++)
-        {
-            splineDistances[i] = (splines[i+1].transform.position - splines[i].transform.position).magnitude;
-        }
-
-        foreach(float length in splineDistances)
-        {
-            trackLength += length;
-        }
     }
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        CheckRaceCompletion();
+    }
 
-        if (!completedFinish)
+    void CalculateSplineTrackDistance()
+    {
+        splineDistances = new float[splines.Length];
+
+        for (int i = 0; i < splines.Length - 1; i++)
         {
-            DistanceToWaypointNodes();
-            RaycastToFinish();
+            splineDistances[i] = (splines[i + 1].transform.position - splines[i].transform.position).magnitude;
         }
-        psm = GetComponent<PlayerScoreManager>();
 
-        if (psm.hasTriggeredStartLine)
+        foreach (float length in splineDistances)
         {
-            DisplayProgressionUI();
+            trackLength += length;
         }
 
     }
@@ -85,8 +75,21 @@ public class DistanceToFinishLine : MonoBehaviour
 
         //initialize the currentwaypoint to the array index of the last item in the array
         currentWayPoint = waypoints[waypoints.Length - 1];
+    }
 
-        //Debug.Log(lengthOfTrack);
+    void CheckRaceCompletion()
+    {
+        if (!completedFinish)
+        {
+            DistanceToWaypointNodes();
+            RaycastToFinish();
+        }
+        psm = GetComponent<PlayerScoreManager>();
+
+        if (psm.hasTriggeredStartLine)
+        {
+            DisplayProgressionUI();
+        }
     }
 
     void RaycastToFinish()
@@ -133,8 +136,6 @@ public class DistanceToFinishLine : MonoBehaviour
         }
         else
             Debug.DrawRay(newRay.origin, newRay.direction  * raycastLength, Color.red);
-
-
     }
 
     void DistanceToWaypointNodes()
@@ -151,21 +152,15 @@ public class DistanceToFinishLine : MonoBehaviour
             {
                 distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
             }
-            //Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
         }
         else
         {
             distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, splines[currentWaypointIndex + 1].transform.position);
         }
-            //Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
 
-
-        float distanceTravelled = (splineDistances[currentWaypointIndex] - distanceToWaypoint) + waypointCompletionLength;
+        float distanceTravelled = (splineDistances[currentWaypointIndex] - distanceToWaypoint) + splineNodesCompletionLength;
         completed = (100 * distanceTravelled / trackLength);
 
-
-        //completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
-        //completed = Mathf.Clamp(completed, 0, 100);
     }
 
     void DisplayProgressionUI()
@@ -189,15 +184,14 @@ public class DistanceToFinishLine : MonoBehaviour
         {
             Debug.Log("Triggered " +other.gameObject.name);
             other.gameObject.GetComponent<Collider>().enabled = false; // disable collider
-            //currentWaypointIndex++; // go and find the midpoint line 
             psm = GetComponent<PlayerScoreManager>();
             psm.hasTriggeredStartLine = true; // set the bool to be true to start incrementing score
         }
 
         if (other.gameObject.tag == "SplineWaypoint")
         {
-            waypointCompletionLength += splineDistances[currentWaypointIndex];
-            other.gameObject.SetActive(false);
+            splineNodesCompletionLength += splineDistances[currentWaypointIndex];
+            other.gameObject.SetActive(false); // whatver spline you hit last set that to false
             currentWaypointIndex++;
         }
 
