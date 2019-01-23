@@ -9,30 +9,59 @@ public class DistanceToFinishLine : MonoBehaviour
     public Text progressionText;
     public GameObject playerCarBumper;
     public GameObject[] waypoints;
+
+
+    public GameObject[] splines;
+    public float[] splineDistances;
+
+
     public GameObject currentWayPoint;
 
     public float distanceToWaypoint;
     private float lengthOfTrack;
-    private float completed = 0; // how much have you completed of the track
+    public float completed = 0; // how much have you completed of the track
     private float raycastLength = 20f;
     private int currentWaypointIndex = 0;
     public bool completedFinish = false;
 
+    float trackLength = 0f;
+    float waypointCompletionLength = 0;
+    
+
     // Use this for initialization
     void Start()
     {
+
+        splineDistances = new float[splines.Length];
         GetLengthOfTrack();
+
+        for (int i = 0; i < splines.Length-1; i++)
+        {
+            splineDistances[i] = (splines[i+1].transform.position - splines[i].transform.position).magnitude;
+        }
+
+        foreach(float length in splineDistances)
+        {
+            trackLength += length;
+        }
     }
 
     // Update is called once per frame
     void Update()
-    {        
+    {   
+
         if (!completedFinish)
         {
             DistanceToWaypointNodes();
             RaycastToFinish();
         }
-        DisplayProgressionUI();
+        psm = GetComponent<PlayerScoreManager>();
+
+        if (psm.hasTriggeredStartLine)
+        {
+            DisplayProgressionUI();
+        }
+
     }
 
     void GetLengthOfTrack()
@@ -64,7 +93,34 @@ public class DistanceToFinishLine : MonoBehaviour
     {
         RaycastHit rayhit;
         Ray newRay = new Ray(playerCarBumper.transform.position, transform.forward);
-       
+
+        if (Physics.Raycast(newRay, out rayhit, raycastLength))
+        {
+            if (rayhit.collider.gameObject.name == "StartLine")
+            {
+                distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
+                completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
+                completed = Mathf.Clamp(completed, 0, 100);
+            }
+            Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
+        }
+        else
+            Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
+
+
+        if (Physics.Raycast(newRay, out rayhit, raycastLength))
+        {
+            if (rayhit.collider.gameObject.name == "SplineWaypoint")
+            {
+                distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
+            }
+            Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
+        }
+        else
+            Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
+
+
+
         if (Physics.Raycast(newRay , out rayhit, raycastLength))
         {
             if (rayhit.collider.gameObject.name == "FinishLine")
@@ -77,14 +133,39 @@ public class DistanceToFinishLine : MonoBehaviour
         }
         else
             Debug.DrawRay(newRay.origin, newRay.direction  * raycastLength, Color.red);
+
+
     }
 
     void DistanceToWaypointNodes()
     {
         //gets the distance between the first waypoint and the player
-        distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, currentWayPoint.transform.position);
-        completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
-        completed = Mathf.Clamp(completed, 0, 100);
+        //distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, currentWayPoint.transform.position);
+        //print(currentWaypointIndex);
+        RaycastHit rayhit;
+        Ray newRay = new Ray(playerCarBumper.transform.position, transform.forward);
+
+        if (Physics.Raycast(newRay, out rayhit, raycastLength))
+        {
+            if (rayhit.collider.gameObject == splines[currentWaypointIndex + 1])
+            {
+                distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
+            }
+            //Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
+        }
+        else
+        {
+            distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, splines[currentWaypointIndex + 1].transform.position);
+        }
+            //Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
+
+
+        float distanceTravelled = (splineDistances[currentWaypointIndex] - distanceToWaypoint) + waypointCompletionLength;
+        completed = (100 * distanceTravelled / trackLength);
+
+
+        //completed = 100 - (100 * distanceToWaypoint / lengthOfTrack);
+        //completed = Mathf.Clamp(completed, 0, 100);
     }
 
     void DisplayProgressionUI()
@@ -104,13 +185,20 @@ public class DistanceToFinishLine : MonoBehaviour
         // they can start incrementing their score by driving forward
         // start line bool is responsible for incrementing score till the finish line reached...
 
-        if (other.gameObject.tag == "StartLine")
+        if (other.gameObject.name == "StartLine")
         {
             Debug.Log("Triggered " +other.gameObject.name);
             other.gameObject.GetComponent<Collider>().enabled = false; // disable collider
-            currentWaypointIndex++; // go and find the finish line 
+            //currentWaypointIndex++; // go and find the midpoint line 
             psm = GetComponent<PlayerScoreManager>();
             psm.hasTriggeredStartLine = true; // set the bool to be true to start incrementing score
+        }
+
+        if (other.gameObject.tag == "SplineWaypoint")
+        {
+            waypointCompletionLength += splineDistances[currentWaypointIndex];
+            other.gameObject.SetActive(false);
+            currentWaypointIndex++;
         }
 
         // if the player touches the finish line
@@ -126,6 +214,7 @@ public class DistanceToFinishLine : MonoBehaviour
             completedFinish = true; // the race is now finished
             psm.hasTriggeredStartLine = false; // we are no longer incrementing score from when we hit the start line
             completed = 100f;
+            DisplayProgressionUI();
         }
     }
 }
