@@ -111,18 +111,6 @@ public class DistanceToFinishLine : MonoBehaviour
             Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
 
 
-        if (Physics.Raycast(newRay, out rayhit, raycastLength))
-        {
-            if (rayhit.collider.gameObject.name == "SplineWaypoint")
-            {
-                distanceToWaypoint = Vector3.Distance(playerCarBumper.transform.position, rayhit.point);
-            }
-            Debug.DrawLine(playerCarBumper.transform.position, rayhit.point);
-        }
-        else
-            Debug.DrawRay(newRay.origin, newRay.direction * raycastLength, Color.red);
-
-
 
         if (Physics.Raycast(newRay , out rayhit, raycastLength))
         {
