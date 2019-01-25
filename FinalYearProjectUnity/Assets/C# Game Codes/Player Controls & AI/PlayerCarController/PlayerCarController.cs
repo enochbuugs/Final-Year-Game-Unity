@@ -19,6 +19,8 @@ public class PlayerCarController : MonoBehaviour {
     public float brakeTorquePower = 100;
     public float brakingPower = 50f;
 
+    GameObject nitroParticle;
+
     // Braking Bools
     public bool carForward;
     public bool carReverse;
@@ -48,8 +50,7 @@ public class PlayerCarController : MonoBehaviour {
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); // get the component of this rigidbody (playercar)
-        currentNitro = maxNitro; // current nitro is now equal to the max nitro (100 at the start)
+        OnPlayerStartSettings();   
     }
 
     // Update is called once per frame
@@ -64,6 +65,14 @@ public class PlayerCarController : MonoBehaviour {
         UpdateNitroValue();
         UpdateWheelMotions();
         //Debug.Log(currentNitro);
+    }
+
+    void OnPlayerStartSettings()
+    {
+        rb = GetComponent<Rigidbody>(); // get the component of this rigidbody (playercar)
+        GetComponent<Rigidbody>().centerOfMass = new Vector3(0, -0.9f, 0.2f); // centre of mass to keep car stable
+        currentNitro = maxNitro; // current nitro is now equal to the max nitro (100 at the start)
+        rb = GetComponent<Rigidbody>(); // get the rigidbody thats attached to the car..
     }
 
     void SetInput()
@@ -131,11 +140,14 @@ public class PlayerCarController : MonoBehaviour {
             isNitrousOn = true;
             motorTorquePower = newTorquePower;
             setMaxSpeed = maxNitroSpeed;
+            nitroParticle.SetActive(true);
+            //particle.play
             //Debug.Log("Nitro activated");
         }
         else if(Input.GetKeyUp(KeyCode.E) && isNitrousOn)
         { 
             isNitrousOn = false;
+            nitroParticle.SetActive(false);
             motorTorquePower = oldTorquePower;
            //Debug.Log("nitrous deactivated");
         }
@@ -165,6 +177,7 @@ public class PlayerCarController : MonoBehaviour {
         UpdateNitroRate(0, 1);
         //Debug.Log("Refilling Nitro Value");
     }
+
 
     void UpdateNitroValue()
     {
