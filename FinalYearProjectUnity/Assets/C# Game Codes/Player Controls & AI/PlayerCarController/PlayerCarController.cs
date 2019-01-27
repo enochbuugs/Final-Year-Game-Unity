@@ -140,14 +140,14 @@ public class PlayerCarController : MonoBehaviour {
             isNitrousOn = true;
             motorTorquePower = newTorquePower;
             setMaxSpeed = maxNitroSpeed;
-            nitroParticle.SetActive(true);
+            //nitroParticle.SetActive(true);
             //particle.play
             //Debug.Log("Nitro activated");
         }
         else if(Input.GetKeyUp(KeyCode.E) && isNitrousOn)
         { 
             isNitrousOn = false;
-            nitroParticle.SetActive(false);
+            //nitroParticle.SetActive(false);
             motorTorquePower = oldTorquePower;
            //Debug.Log("nitrous deactivated");
         }

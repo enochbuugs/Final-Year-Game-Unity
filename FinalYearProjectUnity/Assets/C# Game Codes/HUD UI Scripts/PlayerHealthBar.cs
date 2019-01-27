@@ -137,6 +137,55 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
 
 
 
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (!hasInvicibility)
+        {
+            hasInvicibility = false;
+            ParticleCollisionDamage(other);
+        }
+
+        if (hasInvicibility)
+        {
+            hasInvicibility = true;
+            NoParticleCollisionDamage(other);
+        }
+    }
+
+    #region ("Particle Damage Collision Methods")
+    void ParticleCollisionDamage(GameObject other)
+    {
+        GameObject hitObject = other.gameObject;
+        IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager easyScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (other.tag == "LightDamager"))
+        {
+            Debug.Log("You've been hit");
+            canTakeDamage = true;
+            easyDamageObj.DamageTaken(0.5f);
+            easyScoreDamageObj.ScoreReduction(2f);
+            StartCoroutine(UnpauseScoreEasy());
+        }
+    }
+
+    void NoParticleCollisionDamage(GameObject other)
+    {
+        GameObject hitObject = other.gameObject;
+        IDamageable easyDamageObj = hitObject.GetComponent<IDamageable>();
+        IScoreDamager easyScoreDamageObj = hitObject.GetComponent<IScoreDamager>();
+
+        if (hitObject.GetComponent<IDamageable>() != null && (other.tag == "LightDamager"))
+        {
+            Debug.Log("You are not hit");
+            easyDamageObj.DamageTaken(0f);
+            easyScoreDamageObj.ScoreReduction(0f);
+        }
+    }
+    #endregion
+
+
     #region ("Damage Level Collision Methods")
     void DamageCollisionEasy(Collision collision)
     {
@@ -241,7 +290,6 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
         if (!hasInvicibility)
         {
             hasInvicibility = false;
-            //canTakeDamage = true;
             DamageCollisionEasy(collision);
             DamageCollisionMeduim(collision);
             DamageCollisionHard(collision);
@@ -250,7 +298,6 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
         if (hasInvicibility)
         {
             hasInvicibility = true;
-            //canTakeDamage = false;
             NoDamageCollisionEasy(collision);
             NoDamageCollisionMeduim(collision);
             NoDamageCollisionHard(collision);
@@ -261,10 +308,8 @@ public class PlayerHealthBar : MonoBehaviour, IDamageable, IScoreDamager {
     public IEnumerator Shield()
     {
         hasInvicibility = true;
-        //canTakeDamage = false;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(20f);
         hasInvicibility = false;
-        //canTakeDamage = true;
     }
 
 }
